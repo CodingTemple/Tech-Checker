@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Temple System Check</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 100px auto;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #218838;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body style="font-family: Arial, sans-serif; color: #333333; line-height: 1.6; background-color: #f4f4f4; padding: 20px;">
+    <div style="background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); max-width: 600px; margin: 0 auto;">
+        <!-- Logo Section -->
+        <div style="background-color: #000000; text-align: center; padding: 20px; border-radius: 8px 8px 0 0;">
+            <img src="https://www.codingtemple.com/wp-content/uploads/2022/11/logo.png" alt="Coding Temple Logo" style="max-width: 200px; height: auto;">
+        
+<div class="container">
+    <h1>System Tech Check</h1>
+    <p>Click the button below to check if your system meets the requirements.</p>
+    <div id="emailInputSection">
+    <input type="email" id="userEmail" placeholder="Enter your email address" required>
+    <br />
+    <div><button class="button" onclick="runSystemCheck()">Run Tech Check</button></div>
+</div>
+    <div id="result"></div>
+</div>
+
+<script>
+    function runSystemCheck() {
+        const email = document.getElementById('userEmail').value;
+        
+        if (!email) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+
+        // Hide the email input and button after submission
+        document.getElementById('emailInputSection').style.display = 'none';
+
+        // Send the email to the server for system check
+        fetch(`/check_system?email=${encodeURIComponent(email)}`)
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                
+                if (data.status === "success") {
+                    resultDiv.innerHTML = `<p style="color: green;">${data.message}</p>`;
+                } else {
+                    resultDiv.innerHTML = `<p style="color: red;">${data.message}</p>`;
+                }
+
+                // Display a summary of the user's system specifications
+                resultDiv.innerHTML += `
+                    <p><strong>Operating System:</strong> ${data.specs.os_name} ${data.specs.os_version}</p>
+                    <p><strong>CPU Cores:</strong> ${data.specs.cpu_count} (Required: 4)</p>
+                    <p><strong>Total RAM:</strong> ${data.specs.total_ram_gb.toFixed(2)} GB (Required: 8 GB)</p>
+                    <p><strong>Free Disk Space:</strong> ${data.specs.free_disk_gb.toFixed(2)} GB (Required: 50 GB)</p>
+                `;
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+
+</body>
+</html>
+
+</body>
+</html>
